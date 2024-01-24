@@ -1,0 +1,51 @@
+{% extends "base/index.html" %}
+
+{% block title %}{{item.name}}{% endblock  %}
+
+{% load static %}
+  <script src="{% static 'app.js' %}"></script>
+
+{% block content %}
+
+<div class='grid grid-cols-5 gap-6'>
+    <div class='col-span-3'>
+        <img src='{{item.image.url}}' class='rounded-xl' style="height: 500px;width: 500px;">
+    </div>
+    <div class='cols-span-2 p-6 bg-gray-100 rounded-xl'>
+        <h1 class='mb-6 text-3xl'>{{item.name}}</h1>
+        <p class='text-gray-500'> <strong> Price :{{item.price}}</strong></p>
+        <p class='text-gray-500'> <strong> Seller: {{item.created_by}} </strong> </p>
+    {% if item.description %}
+            <p class='text-gray-500'>
+                <strong class='text-gray-500'>Description</strong>
+            {{item.description}}
+                </p>
+    {% endif %}
+    {% if request.user == item.created_by %}
+    <a href="{% url 'delete' item.id %}" class=" inline-block mt-6 px-3 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-red-700">Delete</a>
+    <a href="{% url 'edit' item.id %}" class=" inline-block mt-6 px-3 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Edit</a>
+    {% else %}
+    <a href="/" class=" inline-block mt-6 px-3 py-3 text-lg font-semibold bg-teal-500 text-white rounded-xl hover:bg-teal-700">Contact Seller</a>
+    {% endif %}
+    </div>
+</div>
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class='mb-12 text-2xl text-center'>Related Items</h2>
+        <div class='grid grid-cols-3 gap-3'>
+            {% for i in r_items %}
+            <div>
+                    <div>
+                        <img src="{{i.image.url}}" class='rounded-t-xl' style="height: 200px; width: 200px;">
+                    </div>
+
+                    <div class='p-6 bg-white rounded-b-xl'>
+                        <a href="{% url 'detail' i.id %}"><h2 class='text-2xl'>{{i.name}}</h2></a>
+                        <p class='text-gray-500'>{{i.price}}</p>
+                    </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+{% endblock  %}
